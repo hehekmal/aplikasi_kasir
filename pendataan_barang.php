@@ -1,15 +1,14 @@
-
 <?php
 session_start();
 include "koneksi.php";
 
-if(!isset($_SESSION["role"])){
+if (!isset($_SESSION["role"])) {
     header("Location: login.php");
     exit;
 }
 
-// Menambahkan barang
-if(isset($_POST["tambah"])){
+
+if (isset($_POST["tambah"])) {
     $nama = mysqli_real_escape_string($connect, $_POST["nama"]);
     $harga = $_POST["harga"];
     $stok = $_POST["stok"];
@@ -21,8 +20,8 @@ if(isset($_POST["tambah"])){
     exit;
 }
 
-// Mengedit barang
-if(isset($_POST["edit"])){
+
+if (isset($_POST["edit"])) {
     $id = $_POST["id"];
     $nama = mysqli_real_escape_string($connect, $_POST["nama"]);
     $harga = $_POST["harga"];
@@ -36,8 +35,8 @@ if(isset($_POST["edit"])){
     exit;
 }
 
-// Menghapus barang
-if(isset($_POST["hapus"])){
+
+if (isset($_POST["hapus"])) {
     $id = $_POST["id"];
 
     mysqli_query($connect, "DELETE FROM produk
@@ -47,10 +46,10 @@ if(isset($_POST["hapus"])){
     exit;
 }
 
-// Mengambil data barang untuk diedit
+
 $dataEdit = null;
 
-if(isset($_GET["edit"])){
+if (isset($_GET["edit"])) {
     $id = (int) $_GET["edit"];
 
     $queryEdit = mysqli_query($connect, "SELECT * FROM produk
@@ -59,12 +58,13 @@ if(isset($_GET["edit"])){
     $dataEdit = mysqli_fetch_assoc($queryEdit);
 }
 
-// Menampilkan data barang
+
 $dataBarang = mysqli_query($connect, "SELECT * FROM produk ORDER BY produkID DESC");
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Pendataan Barang</title>
 
@@ -82,16 +82,16 @@ $dataBarang = mysqli_query($connect, "SELECT * FROM produk ORDER BY produkID DES
         }
 
         label {
-    display: block;
-    margin-top: 10px;
-}
+            display: block;
+            margin-top: 10px;
+        }
 
-input {
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    margin: 5px 0 10px;
-}
+        input {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 5px 0 10px;
+        }
 
         button {
             padding: 10px;
@@ -108,7 +108,8 @@ input {
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
@@ -128,99 +129,100 @@ input {
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h2>Pendataan Barang</h2>
+        <h2>Pendataan Barang</h2>
 
-    <p>Kelola data barang yang tersedia di toko.</p>
+        <p>Kelola data barang yang tersedia di toko.</p>
 
-    <h3><?php echo $dataEdit ? "Edit Barang" : "Tambah Barang"; ?></h3>
+        <h3><?php echo $dataEdit ? "Edit Barang" : "Tambah Barang"; ?></h3>
 
-    <form method="POST">
+        <form method="POST">
 
-        <?php if($dataEdit) { ?>
-            <input type="hidden" name="id"
-            value="<?php echo $dataEdit["produkID"]; ?>">
-        <?php } ?>
+            <?php if ($dataEdit) { ?>
+                <input type="hidden" name="id"
+                    value="<?php echo $dataEdit["produkID"]; ?>">
+            <?php } ?>
 
-        <label>Nama Barang</label>
-        <input type="text" name="nama"
-        value="<?php echo $dataEdit ? htmlspecialchars($dataEdit["namaProduk"]) : ""; ?>"
-        placeholder="Masukkan nama barang" required>
+            <label>Nama Barang</label>
+            <input type="text" name="nama"
+                value="<?php echo $dataEdit ? htmlspecialchars($dataEdit["namaProduk"]) : ""; ?>"
+                placeholder="Masukkan nama barang" required>
 
-        <label>Harga</label>
-        <input type="number" name="harga"
-        value="<?php echo $dataEdit ? $dataEdit["harga"] : ""; ?>"
-        placeholder="Masukkan harga barang" min="0" step="0.01" required>
+            <label>Harga</label>
+            <input type="number" name="harga"
+                value="<?php echo $dataEdit ? $dataEdit["harga"] : ""; ?>"
+                placeholder="Masukkan harga barang" min="0" step="0.01" required>
 
-        <label>Stok</label>
-        <input type="number" name="stok"
-        value="<?php echo $dataEdit ? $dataEdit["stok"] : ""; ?>"
-        placeholder="Masukkan jumlah stok" min="0" required>
+            <label>Stok</label>
+            <input type="number" name="stok"
+                value="<?php echo $dataEdit ? $dataEdit["stok"] : ""; ?>"
+                placeholder="Masukkan jumlah stok" min="0" required>
 
-        <?php if($dataEdit) { ?>
+            <?php if ($dataEdit) { ?>
 
-            <button type="submit" name="edit">Simpan Perubahan</button>
-            <a href="pendataan_barang.php">Batal</a>
+                <button type="submit" name="edit">Simpan Perubahan</button>
+                <a href="pendataan_barang.php">Batal</a>
 
-        <?php } else { ?>
+            <?php } else { ?>
 
-            <button type="submit" name="tambah">Tambah Barang</button>
+                <button type="submit" name="tambah">Tambah Barang</button>
 
-        <?php } ?>
+            <?php } ?>
 
-    </form>
+        </form>
 
-    <h3>Daftar Barang</h3>
+        <h3>Daftar Barang</h3>
 
-    <table>
-        <tr>
-            <th>No</th>
-            <th>Nama Barang</th>
-            <th>Harga</th>
-            <th>Stok</th>
-            <th>Aksi</th>
-        </tr>
+        <table>
+            <tr>
+                <th>No</th>
+                <th>Nama Barang</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+            </tr>
 
-        <?php
-        $no = 1;
+            <?php
+            $no = 1;
 
-        while($barang = mysqli_fetch_assoc($dataBarang)){
-        ?>
+            while ($barang = mysqli_fetch_assoc($dataBarang)) {
+            ?>
 
-        <tr>
-            <td><?php echo $no++; ?></td>
+                <tr>
+                    <td><?php echo $no++; ?></td>
 
-            <td><?php echo htmlspecialchars($barang["namaProduk"]); ?></td>
+                    <td><?php echo htmlspecialchars($barang["namaProduk"]); ?></td>
 
-            <td>Rp <?php echo number_format($barang["harga"], 0, ",", "."); ?></td>
+                    <td>Rp <?php echo number_format($barang["harga"], 0, ",", "."); ?></td>
 
-            <td><?php echo $barang["stok"]; ?></td>
+                    <td><?php echo $barang["stok"]; ?></td>
 
-            <td>
-                <a href="pendataan_barang.php?edit=<?php echo $barang["produkID"]; ?>">Edit</a>
+                    <td>
+                        <a href="pendataan_barang.php?edit=<?php echo $barang["produkID"]; ?>">Edit</a>
 
-                <form method="POST" style="display:inline;"
-                onsubmit="return confirm('Yakin ingin menghapus barang ini?')">
+                        <form method="POST" style="display:inline;"
+                            onsubmit="return confirm('Yakin ingin menghapus barang ini?')">
 
-                    <input type="hidden" name="id"
-                    value="<?php echo $barang["produkID"]; ?>">
+                            <input type="hidden" name="id"
+                                value="<?php echo $barang["produkID"]; ?>">
 
-                    <button type="submit" name="hapus">Hapus</button>
+                            <button type="submit" name="hapus">Hapus</button>
 
-                </form>
-            </td>
-        </tr>
+                        </form>
+                    </td>
+                </tr>
 
-        <?php } ?>
+            <?php } ?>
 
-    </table>
+        </table>
 
-    <br>
+        <br>
 
-    <a href="dashboard.php">Kembali ke Dashboard</a>
+        <a href="dashboard.php">Kembali ke Dashboard</a>
 
-</div>
+    </div>
 
 </body>
+
 </html>
